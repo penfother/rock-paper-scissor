@@ -1,6 +1,7 @@
 // calls a random number to be assigned as a weapon
 function getComputerChoice () {
-    let randomWeapon = Math.floor(Math.random() * 3 +1);
+    let randomWeapon = Math.floor(Math.random() * 3) - 1;
+    console.log("random number is: ", randomWeapon)
     return randomWeapon;
 };
 
@@ -27,6 +28,19 @@ function decideWinner (playersChoice, computersChoice) {
     }
 }
 
+//adds battle flavour text
+function battleFlavour(computersChoice) {
+    let flavourText;
+    if (computersChoice == "rock") {
+        flavourText = "Computer chooses rock.";
+    } else if (computersChoice == "paper") {
+        flavourText = "Computer chooses paper.";
+    } else if (computersChoice == "scissors") {
+        flavourText = "Computer chooses scissors.";
+    }
+    return flavourText;
+}
+
 // determine player win condition
 function winCondition(winLossCounter) {
     if (winLossCounter < 0) {
@@ -50,7 +64,12 @@ for (let i = 0; i < 3; i++) {
     // player chooses his "weapon"
     let playerChosenWeapon = prompt("Enter rock, paper or scissors: ");
     playerWeapon = getChoice(playerChosenWeapon);
+    //calls for computers choice
     computerWeapon = getChoice(getComputerChoice());
+    console.log(computerWeapon); // added for debugging
+    //adds flavour text
+    console.log(battleFlavour(computerWeapon));
     winCounter = winCounter + decideWinner(playerWeapon, computerWeapon);
+    console.log(winCounter);
     console.log(winCondition(winCounter));
 }
