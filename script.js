@@ -1,7 +1,6 @@
-// calls a random number to be assigned as a weapon
-function getComputerChoice () {
+// calls a random number between -1 and 1 to be assigned as a weapon
+function getComputerChoice (randNum) {
     let randomWeapon = Math.floor(Math.random() * 3) - 1;
-    console.log("random number is: ", randomWeapon)
     return randomWeapon;
 };
 
@@ -12,7 +11,7 @@ function getChoice(chosenWeapon) {
         return -1;
     } else if (chosenWeapon == "paper") {
         return 0;
-    } else if (chosenWeapon == "scissors") { 
+    } else if (chosenWeapon == "scissors" || chosenWeapon == "scissor") { 
         return 1;
     }
 };
@@ -31,17 +30,17 @@ function decideWinner (playersChoice, computersChoice) {
 //adds battle flavour text
 function battleFlavour(computersChoice) {
     let flavourText;
-    if (computersChoice == "rock") {
+    if (computersChoice == -1) {
         flavourText = "Computer chooses rock.";
-    } else if (computersChoice == "paper") {
+    } else if (computersChoice == 0) {
         flavourText = "Computer chooses paper.";
-    } else if (computersChoice == "scissors") {
+    } else if (computersChoice == 1) {
         flavourText = "Computer chooses scissors.";
     }
     return flavourText;
 }
 
-// determine player win condition
+// determine player win or loss
 function winCondition(winLossCounter) {
     if (winLossCounter < 0) {
         return "Computer wins this round.";
@@ -55,21 +54,45 @@ function winCondition(winLossCounter) {
 // determines overall winner
 
 function chooseVictor(winCounter) {
+    let flavaFlav;
+    if (winCounter < 0 ) {
+        return flavaFlav = "Computer wins, better luck next time.";
+    } else { 
+        return flavaFlav = "Congratulations, you won!";
+    }
 }
 
 // tracks the number of times user wins the battle
 let winCounter = 0;
 
 for (let i = 0; i < 3; i++) {
+
     // player chooses his "weapon"
     let playerChosenWeapon = prompt("Enter rock, paper or scissors: ");
     playerWeapon = getChoice(playerChosenWeapon);
+    console.log("player chose: ", playerWeapon); // added for debugging, should change to add flavor
+
     //calls for computers choice
-    computerWeapon = getChoice(getComputerChoice());
+    computerWeapon = getComputerChoice();
     console.log(computerWeapon); // added for debugging
+    
     //adds flavour text
     console.log(battleFlavour(computerWeapon));
-    winCounter = winCounter + decideWinner(playerWeapon, computerWeapon);
-    console.log(winCounter);
-    console.log(winCondition(winCounter));
-}
+
+    //decided winner
+    let decidedWinner = decideWinner(playerWeapon, computerWeapon);
+    console.log(winCondition(decidedWinner));
+    
+    //container variable for win/loss counter
+    winCounter = winCounter + decidedWinner;
+    
+    //adds flavour text for wincounter
+    console.log("wincounter is: ", winCounter);
+
+    
+};
+
+//says who won
+let winFlavour = chooseVictor(winCounter);
+console.log(winFlavour);
+
