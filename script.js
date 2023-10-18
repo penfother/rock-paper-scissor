@@ -57,9 +57,11 @@ function chooseVictor(winCounter) {
     let flavaFlav;
     if (winCounter < 0 ) {
         return flavaFlav = "Computer wins, better luck next time.";
-    } else { 
+    } else if (winCounter > 0){ 
         return flavaFlav = "Congratulations, you won!";
-    }
+    } else {
+        return flavaFlav = "It's a draw overall!";
+    };
 }
 
 // tracks the number of times user wins the battle
@@ -74,7 +76,6 @@ for (let i = 0; i < 3; i++) {
 
     //calls for computers choice
     computerWeapon = getComputerChoice();
-    console.log(computerWeapon); // added for debugging
     
     //adds flavour text
     console.log(battleFlavour(computerWeapon));
