@@ -1,22 +1,33 @@
-// calls a random number between -1 and 1 to be assigned as a weapon
-function getComputerChoice (randNum) {
+//LOGIC BEHIND THE ROCK PAPER SCISSOR
+
+//array container for battle outcome
+let battleArray={
+    winresult:    "", 
+    playerscore:    0, 
+    computerscore:  0,
+    pflav:         "",
+    compflav:      "",
+    playedgames:    0,
+    };
+
+//calls a random number between -1 and 1 to be assigned as computers weapon
+function getComputerChoice () {
     let randomWeapon = Math.floor(Math.random() * 3) - 1;
     return randomWeapon;
 };
 
-
-// translates string variable of players chosen weapon to its corresponding number
-function getChoice(chosenWeapon) {
-    if (chosenWeapon == "rock") {
-        return -1;
-    } else if (chosenWeapon == "paper") {
-        return 0;
-    } else if (chosenWeapon == "scissors" || chosenWeapon == "scissor") { 
-        return 1;
-    }
+//translates button event to a usable flavour string
+function getPlayerChoiceFlavour(chosenWeapon) {
+    if (chosenWeapon == -1) {
+        return "rock.";
+    } else if (chosenWeapon == 0) {
+        return "paper.";
+    } else if (chosenWeapon == 1) { 
+        return "scissors.";
+    };
 };
 
-// determines who wins this round by comparing stored choice values
+//determines who wins this round by comparing stored choice values
 function decideWinner (playersChoice, computersChoice) {
     if (playersChoice - computersChoice == -2 || playersChoice - computersChoice == 1) {          
         return 1;  //increases winCounter for player, player wins
@@ -28,76 +39,90 @@ function decideWinner (playersChoice, computersChoice) {
 }
 
 //adds battle flavour text for computers "choice"
-function battleFlavour(computersChoice) {
-    let flavourText;
+function computerFlavour(computersChoice) {
     if (computersChoice == -1) {
-        flavourText = "Computer chooses rock.";
+        return "Computer chooses rock.";
     } else if (computersChoice == 0) {
-        flavourText = "Computer chooses paper.";
+        return "Computer chooses paper.";
     } else if (computersChoice == 1) {
-        flavourText = "Computer chooses scissors.";
-    }
-    return flavourText;
-}
+        return "Computer chooses scissors.";
+    };
+};
 
-// determines players win or loss
+//determines players win or loss
 function winCondition(winLossCounter) {
     if (winLossCounter < 0) {
         return "Computer wins this round.";
     } else if (winLossCounter == 0 ) {
         return "It's a draw!";
     } else {
-        return "Player wins this round.";
+        return "You win this round.";
     }
-}
-
-// determines overall winner
-function chooseVictor(winCounter) {
-    let flavaFlav;
-    if (winCounter < 0 ) {
-        return flavaFlav = "Computer wins, better luck next time.";
-    } else if (winCounter > 0){ 
-        return flavaFlav = "Congratulations, you won!";
-    } else {
-        return flavaFlav = "It's a draw overall!";
-    };
-}
-
-// tracks the number of times user wins the battle
-let winCounter = 0;
-
-for (let i = 0; i < 3; i++) {
-
-    // player chooses his "weapon"
-    let playerChosenWeapon = prompt("Enter rock, paper or scissors: ");
-
-    //cleans the input to be lowercase
-    playerChosenWeapon = playerChosenWeapon.toLowerCase(playerChosenWeapon);
-
-    //translates players choice to a number
-    playerWeapon = getChoice(playerChosenWeapon);
-    console.log("You chose: ", playerChosenWeapon); // adds flavor text for player choice
-
-    //calls for computers choice
-    computerWeapon = getComputerChoice();
-    
-    //adds computers flavour text
-    console.log(battleFlavour(computerWeapon));
-
-    //determines winner of that round
-    let decidedWinner = decideWinner(playerWeapon, computerWeapon);
-    console.log(winCondition(decidedWinner));
-    
-    //container for win/loss counter, negative represents computers win, positive players
-    winCounter = winCounter + decidedWinner;
-    
-    //adds flavour text for wincounter
-    console.log("wincounter is: ", winCounter);
-
-    
 };
 
-//determines overall winner
-let winFlavour = chooseVictor(winCounter);
-console.log(winFlavour);
+//function for playing rock-paper-scissors, takes in players pressed button and battleArray, returns the result in an array
+function rockPaperScissors(chosenWeapon, battleArray) {
+   
+    //displays players choice as flavour text
+    battleArray["pflav"] = "You chose " + getPlayerChoiceFlavour(chosenWeapon);
+
+    //calls for computers choice
+    let computerWeapon = getComputerChoice();
+    
+    //adds computers flavour text to the array
+    battleArray["compflav"] = computerFlavour(computerWeapon);
+
+    //determines winner of that round, updates battleArray
+    let decidedWinner = decideWinner(chosenWeapon, computerWeapon);
+    battleArray["winresult"] = winCondition(decidedWinner);
+
+    //updates scoreboard, if decidedWinner is negative then computer gets a point, 
+    //if decidedWinner is positive player gets a point, 0 doesn't change scoreboard
+    if (decidedWinner > 0) {
+        battleArray["playerscore"] += 1;
+    } else if (decidedWinner < 0) {
+        battleArray["computerscore"] += 1;
+    };
+
+    battleArray["playedgames"] += 1;
+
+    return battleArray;
+
+};
+
+
+//WEBSITE PART
+
+//CONTAINER VARIABLES FOR DOM
+
+const rockButton = document.getElementsByClassName("rockButton")[0];
+const paperButton = document.getElementsByClassName("paperButton")[0];
+const scissorsButton = document.getElementsByClassName("scissorsButton")[0];
+const scoreBoard = document.getElementsByClassName("scoreBoard")[0];
+const playersWins = document.getElementsByClassName("playersWins")[0];
+const computersWins = document.getElementsByClassName("computersWins")[0]
+const whoWonTheRound = document.getElementsByClassName("whoWonTheRound")[0];
+const winner = document.getElementsByClassName("winner")[0];
+
+//PAGE REACTION TO USER INPUT
+
+//handles displayed text in scoreboard
+function updateScorebard(battleArray) {
+    playersWins.textContent = battleArray["playerscore"];
+    computersWins.textContent = battleArray["computerscore"];
+    whoWonTheRound.textContent = battleArray["winresult"];
+
+    if (battleArray["playerscore"] == 5) {
+        winner.textContent = "You win!";
+    } else if (battleArray["computerscore"] == 5) {
+        winner.textContent = "Computer wins!";
+    };
+};
+
+rockButton.addEventListener("click", () => updateScorebard((rockPaperScissors(-1, battleArray)), battleArray));
+
+paperButton.addEventListener("click", () => updateScorebard((rockPaperScissors(0, battleArray)), battleArray));
+
+scissorsButton.addEventListener("click", () => updateScorebard((rockPaperScissors(1, battleArray)), battleArray));
+
 
