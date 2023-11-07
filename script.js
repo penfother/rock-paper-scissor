@@ -106,14 +106,15 @@ const winner = document.getElementById("winner");
 //PAGE REACTION TO USER INPUT
 
 //disables game input buttons after one of the players wins
-    function disableBattle() {
-        document.getElementById("rockButton").disabled = true;
-        document.getElementById("paperButton").disabled = true;
-        document.getElementById("scissorsButton").disabled = true;
-    };
+function disableBattle() {
+    document.getElementById("rockButton").disabled = true;
+    document.getElementById("paperButton").disabled = true;
+    document.getElementById("scissorsButton").disabled = true;
+};
 
 //handles displayed text in scoreboard
 function updateScorebard(battleArray) {
+    
     playersWins.textContent = battleArray["playerscore"];
     computersWins.textContent = battleArray["computerscore"];
     whoWonTheRound.textContent = battleArray["winresult"];
