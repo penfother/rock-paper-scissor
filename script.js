@@ -90,21 +90,27 @@ function rockPaperScissors(chosenWeapon, battleArray) {
 
 };
 
-
 //WEBSITE PART
 
 //CONTAINER VARIABLES FOR DOM
 
-const rockButton = document.getElementsByClassName("rockButton")[0];
-const paperButton = document.getElementsByClassName("paperButton")[0];
-const scissorsButton = document.getElementsByClassName("scissorsButton")[0];
-const scoreBoard = document.getElementsByClassName("scoreBoard")[0];
-const playersWins = document.getElementsByClassName("playersWins")[0];
-const computersWins = document.getElementsByClassName("computersWins")[0]
-const whoWonTheRound = document.getElementsByClassName("whoWonTheRound")[0];
-const winner = document.getElementsByClassName("winner")[0];
+const rockButton = document.getElementById("rockButton");
+const paperButton = document.getElementById("paperButton");
+const scissorsButton = document.getElementById("scissorsButton");
+const scoreBoard = document.getElementById("scoreBoard");
+const playersWins = document.getElementById("playersWins");
+const computersWins = document.getElementById("computersWins");
+const whoWonTheRound = document.getElementById("whoWonTheRound");
+const winner = document.getElementById("winner");
 
 //PAGE REACTION TO USER INPUT
+
+//disables game input buttons after one of the players wins
+    function disableBattle() {
+        document.getElementById("rockButton").disabled = true;
+        document.getElementById("paperButton").disabled = true;
+        document.getElementById("scissorsButton").disabled = true;
+    };
 
 //handles displayed text in scoreboard
 function updateScorebard(battleArray) {
@@ -112,10 +118,14 @@ function updateScorebard(battleArray) {
     computersWins.textContent = battleArray["computerscore"];
     whoWonTheRound.textContent = battleArray["winresult"];
 
-    if (battleArray["playerscore"] == 5) {
+    if (battleArray["playerscore"] >= 5) {
         winner.textContent = "You win!";
-    } else if (battleArray["computerscore"] == 5) {
+        disableBattle();
+
+    } else if (battleArray["computerscore"] >= 5) {
         winner.textContent = "Computer wins!";
+        document.querySelectorAll("#button").disabled = true;
+        disableBattle();
     };
 };
 
